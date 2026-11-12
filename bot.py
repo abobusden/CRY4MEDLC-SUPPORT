@@ -749,7 +749,8 @@ async def main():
     cleanup_old_tickets()
     asyncio.create_task(periodic_cleanup())
     print("🤖 Бот запущен. Ожидание сообщений...")
-    await dp.start_polling(bot)
+    # handle_signals=False нужен для работы в фоновом потоке на Render
+    await dp.start_polling(bot, handle_signals=False)
 
 
 if __name__ == "__main__":
