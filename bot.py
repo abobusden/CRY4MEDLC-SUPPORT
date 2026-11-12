@@ -2,7 +2,7 @@ import json
 import os
 import time
 import asyncio
-from datetime import datetime
+import functools  # Добавлено для корректной работы декораторов
 
 from aiogram import Bot, Dispatcher, F
 from aiogram.types import (
@@ -542,6 +542,7 @@ async def view_ticket(callback: CallbackQuery):
 # ============================================================
 
 def owner_only(func):
+    @functools.wraps(func)
     async def wrapper(message: Message, *args, **kwargs):
         if not is_owner(message.from_user.id):
             await message.answer("⛔ Только владелец.")
@@ -551,6 +552,7 @@ def owner_only(func):
 
 
 def staff_only(func):
+    @functools.wraps(func)
     async def wrapper(message: Message, *args, **kwargs):
         if not is_staff(message.from_user.id):
             await message.answer("⛔ Нет доступа.")
